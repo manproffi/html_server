@@ -6,6 +6,8 @@
 #include <stack>
 #include <map>
 #include <queue>
+#include <gtest/gtest_prod.h>
+#include <limits>
 
 class ReversePolishNotation
 {
@@ -21,6 +23,7 @@ private:
 	void multiplication(int &, int &);
 	void division(int &, int &);
 	void remainder(int &, int &); // %
+	void checkOverUnderFlow(int64_t);
 
 private:
 	std::string m_input_data;
@@ -29,6 +32,10 @@ private:
 	std::queue<std::string> quOutput;
 	static const std::map<char, int> m_operation_priority;
 	std::map<char, std::function<void (int&, int&)>> m_operation;
+
+private:
+	FRIEND_TEST(ProcessTest, INputToRPN1);
+	FRIEND_TEST(ProcessTest, INputToRPN2);
 };
 
 #endif // REVERSEPOLISHNOTATION_H

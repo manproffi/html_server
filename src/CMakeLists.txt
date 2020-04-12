@@ -1,4 +1,5 @@
 
+include_directories(../googletest/googletest/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(SOURCE_FILES main.cpp ReversePolishNotation.cpp)

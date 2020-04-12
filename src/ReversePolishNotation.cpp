@@ -39,9 +39,9 @@ void ReversePolishNotation::process()
 			int priorityLevel = 0;
 			try {
 				priorityLevel = m_operation_priority.at(str[i]);
-			} catch (const std::out_of_range& oor) {
-				std::cout << "Undefined symbol: [" << str[i] << "] " << oor.what() << std::endl;
-				throw "Error: Undefined symbol\n";
+			} catch (const std::out_of_range &) {
+				//std::cout << "Undefined symbol: [" << str[i] << "] " << oor.what() << std::endl;
+				throw "Error: Undefined symbol";
 			}
 			if (stBuf.empty() || priorityLevel > m_operation_priority.at(stBuf.top()) || str[i] == '(')
 			{
@@ -55,7 +55,7 @@ void ReversePolishNotation::process()
 					stBuf.pop();
 				}
 				if (stBuf.empty())
-					throw "Error: open bracket is missing\n";
+					throw "Error: open bracket is missing";
 				else
 					stBuf.pop(); //delete '('
 			}
@@ -75,7 +75,7 @@ void ReversePolishNotation::process()
 	while (!stBuf.empty())
 	{
 		if (stBuf.top() == '(')
-			throw "Error: close bracket is missing\n";
+			throw "Error: close bracket is missing";
 		quOutput.push(std::string(1, stBuf.top()));
 		stBuf.pop();
 	}
@@ -115,7 +115,7 @@ int ReversePolishNotation::calculationRPN()
 		if (quOutput.front().size() == 1 && quOutput.front().c_str()[0] < 48)
 		{
 			if (stOutput.size() < 2)
-				throw "Error: not enough elements in stack\n";
+				throw "Error: not enough elements in stack";
 			int tmp2 = stOutput.top();
 			stOutput.pop();
 			int tmp1 = stOutput.top();
@@ -131,7 +131,7 @@ int ReversePolishNotation::calculationRPN()
 	if (stOutput.size() == 1)
 		return stOutput.top();
 	else {
-		throw "Error:: incorrect number of operations\n";
+		throw "Error:: incorrect number of operations";
 	}
 
 }
@@ -144,41 +144,56 @@ void ReversePolishNotation::getNumber(const char *str, int & i)
 		ss << tmp;
 		quOutput.push(ss.str());
 		i += (ss.str().size() - 1);
-		std::cout << "Num: " << ss.str() << std::endl;
+		//std::cout << "Num: " << ss.str() << std::endl;
 	} catch (const std::out_of_range& ) {
-		std::cout << "Error: Invalid number" << std::endl;
-		throw "Error: Invalid number\n";
+		//std::cout << "Error: Invalid number" << std::endl;
+		throw "Error: Invalid number";
 	}
 }
 
 void ReversePolishNotation::addition(int & a, int & b)
 {
 //	std::cout << "addition" << std::endl;
+	checkOverUnderFlow((static_cast<int64_t>(a) + b));
 	stOutput.push(a + b);
 }
 
 void ReversePolishNotation::subtraction(int & a, int & b)
 {
 //	std::cout << "subtraction" << std::endl;
+	checkOverUnderFlow((static_cast<int64_t>(a) - b));
 	stOutput.push(a - b);
 }
 
 void ReversePolishNotation::multiplication(int & a, int & b)
 {
 //	std::cout << "multiplication" << std::endl;
+	checkOverUnderFlow((static_cast<int64_t>(a) * b));
 	stOutput.push(a * b);
 }
 
 void ReversePolishNotation::division(int & a, int & b)
 {
 //	std::cout << "division" << std::endl;
+	if (b == 0)
+		throw "Error: division by 0";
 	stOutput.push(a / b);
 }
 
 void ReversePolishNotation::remainder(int & a, int & b)
 {
 //	std::cout << "remainder" << std::endl;
+	if (b == 0)
+		throw "Error: remainder by 0";
 	stOutput.push(a % b);
+}
+
+void ReversePolishNotation::checkOverUnderFlow(int64_t res)
+{
+	if (res > std::numeric_limits<int>::max())
+		throw "Error: result of multiplication is overflow int";
+	else if (res < std::numeric_limits<int>::min())
+		throw "Error: result of multiplication is underflow int";
 }
 
 const std::map<char, int> ReversePolishNotation::m_operation_priority =
