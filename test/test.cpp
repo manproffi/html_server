@@ -43,6 +43,13 @@ TEST(CalculationRPN, Output2)
 	ASSERT_EQ(10723201, rpn.calculationRPN());
 }
 
+TEST(CalculationRPN, Output3)
+{
+	ReversePolishNotation rpn("1234%10*25");
+	rpn.process();
+	ASSERT_EQ(100, rpn.calculationRPN());
+}
+
 TEST(InputTest, OverflowInt)
 {
 	ReversePolishNotation rpn("2147483648*23+1000/20*(100+10)");
@@ -128,4 +135,11 @@ TEST(CalculationTest, IncorrectNumber)
 {
 	ReversePolishNotation rpn("2147a483+10");
 	ASSERT_THROW(rpn.process(), const char *);
+}
+
+TEST(CalculationTest, MissingOneNumber)
+{
+	ReversePolishNotation rpn("20+10*");
+	rpn.process();
+	ASSERT_THROW(rpn.calculationRPN(), const char *);
 }

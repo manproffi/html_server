@@ -1,1 +1,5 @@
 build/*
+CODE_COVERAGE/*
+*.gcov
+*.info
+

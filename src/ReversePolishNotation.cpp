@@ -39,8 +39,7 @@ void ReversePolishNotation::process()
 			int priorityLevel = 0;
 			try {
 				priorityLevel = m_operation_priority.at(str[i]);
-			} catch (const std::out_of_range &) {
-				//std::cout << "Undefined symbol: [" << str[i] << "] " << oor.what() << std::endl;
+			} catch (const std::out_of_range) {
 				throw "Error: Undefined symbol";
 			}
 			if (stBuf.empty() || priorityLevel > m_operation_priority.at(stBuf.top()) || str[i] == '(')
@@ -71,6 +70,7 @@ void ReversePolishNotation::process()
 			
 		}
 	} //End for
+
 	//move all characters to output stack
 	while (!stBuf.empty())
 	{
@@ -79,37 +79,10 @@ void ReversePolishNotation::process()
 		quOutput.push(std::string(1, stBuf.top()));
 		stBuf.pop();
 	}
-
-	//print output stack
-//	std::cout << "Popping out elements...";
-//	while (!quOutput.empty())
-//	{
-//		std::cout << ' ' << quOutput.top();
-//		quOutput.pop();
-//	}
-//	std::cout << '\n';
-
-//	//print output stack
-//	std::cout << "Popping out elements...";
-//	while (!stBuf.empty())
-//	{
-//		std::cout << ' ' << stBuf.top();
-//		stBuf.pop();
-//	}
-//	std::cout << '\n';
 }
 
 int ReversePolishNotation::calculationRPN()
 {
-	//print output stack
-//		std::cout << "Popping out elements...";
-//		while (!quOutput.empty())
-//		{
-//			std::cout << ' ' << quOutput.front();
-//			quOutput.pop();
-//		}
-//		std::cout << '\n';
-
 	while (!quOutput.empty())
 	{
 		if (quOutput.front().size() == 1 && quOutput.front().c_str()[0] < 48)
@@ -153,28 +126,24 @@ void ReversePolishNotation::getNumber(const char *str, int & i)
 
 void ReversePolishNotation::addition(int & a, int & b)
 {
-//	std::cout << "addition" << std::endl;
 	checkOverUnderFlow((static_cast<int64_t>(a) + b));
 	stOutput.push(a + b);
 }
 
 void ReversePolishNotation::subtraction(int & a, int & b)
 {
-//	std::cout << "subtraction" << std::endl;
 	checkOverUnderFlow((static_cast<int64_t>(a) - b));
 	stOutput.push(a - b);
 }
 
 void ReversePolishNotation::multiplication(int & a, int & b)
 {
-//	std::cout << "multiplication" << std::endl;
 	checkOverUnderFlow((static_cast<int64_t>(a) * b));
 	stOutput.push(a * b);
 }
 
 void ReversePolishNotation::division(int & a, int & b)
 {
-//	std::cout << "division" << std::endl;
 	if (b == 0)
 		throw "Error: division by 0";
 	stOutput.push(a / b);
@@ -182,7 +151,6 @@ void ReversePolishNotation::division(int & a, int & b)
 
 void ReversePolishNotation::remainder(int & a, int & b)
 {
-//	std::cout << "remainder" << std::endl;
 	if (b == 0)
 		throw "Error: remainder by 0";
 	stOutput.push(a % b);
